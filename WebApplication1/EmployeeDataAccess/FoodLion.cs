@@ -14,6 +14,7 @@ namespace EmployeeDataAccess
     
     public partial class FoodLion
     {
+        // this class was genreate after adding EmployeeDataModel.
         public int RecordID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
