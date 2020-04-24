@@ -19,12 +19,40 @@ namespace WebApplication1.Controllers
                 return entities.FoodLions.ToList();
             }
         }
-        public FoodLion Get(int id)
+        public HttpResponseMessage Get(int id)
+        {
+            using (employeesEntities entities = new employeesEntities())
+            { 
+                ///example: http:/ /localhost:49891/api/employees/3
+                var entity = entities.FoodLions.FirstOrDefault(e => e.RecordID == id);
+                if (entity != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, entity);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "employee with ID: " + id);
+                }
+            }
+        }
+        public HttpResponseMessage Post([FromBody]FoodLion employee)
         {
             using (employeesEntities entities = new employeesEntities())
             {
-                return entities.FoodLions.FirstOrDefault(e => e.RecordID == id);
-                ///example: http:/ /localhost:49891/api/employees/3
+                try
+                {
+                    entities.FoodLions.Add(employee);
+                    entities.SaveChanges();
+                    // this code changes the status form 202 to 201 created 
+                    // and changes location to http:// localhost:49891/api/employees/10
+                    var message = Request.CreateResponse(HttpStatusCode.Created, employee);
+                    message.Headers.Location = new Uri(Request.RequestUri + employee.RecordID.ToString());
+                    return message;
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
             }
         }
     }
