@@ -55,5 +55,60 @@ namespace WebApplication1.Controllers
                 }
             }
         }
+        public HttpResponseMessage delete(int id)
+        {
+            using (employeesEntities entities = new employeesEntities())
+            {
+                //removes from FoodLion's collection
+                try
+                {
+                    var entity = entities.FoodLions.Remove(entities.FoodLions.FirstOrDefault(e => e.RecordID == id));
+                    entities.SaveChanges();
+                    if (entity != null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+                    }
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "employee with ID: " + id.ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+        }
+        public HttpResponseMessage put(int id, [FromBody]FoodLion employee)
+        {
+            using (employeesEntities entities = new employeesEntities())
+            {
+                try
+                {
+
+                // get the value of the table foodLion class
+                var entity = entities.FoodLions.FirstOrDefault(e => e.RecordID == id);
+                if (entity != null)
+                {
+                    entity.FirstName = employee.FirstName;
+                    entity.FirstName = employee.LastName;
+                    entity.Gender = employee.Gender;
+                    entity.Salary = employee.Salary;
+
+                    entities.SaveChanges();
+                    return  Request.CreateResponse(HttpStatusCode.OK, entity);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "employee with ID: " + id.ToString());
+                }
+                }
+                catch (Exception ex)
+                {
+
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+        }
     }
 }
