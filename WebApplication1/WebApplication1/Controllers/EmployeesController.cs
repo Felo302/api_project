@@ -10,7 +10,8 @@ namespace WebApplication1.Controllers
 {
     public class EmployeesController : ApiController
     {
-        public IEnumerable<FoodLion> Get()
+        [HttpGet]
+        public IEnumerable<FoodLion> LoadAllEmployees() 
         {
             using(employeesEntities entities = new employeesEntities())
             {
