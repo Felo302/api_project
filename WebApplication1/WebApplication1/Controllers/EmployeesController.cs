@@ -10,14 +10,27 @@ namespace WebApplication1.Controllers
 {
     public class EmployeesController : ApiController
     {
-        [HttpGet]
-        public IEnumerable<FoodLion> LoadAllEmployees() 
+        
+        public HttpResponseMessage Get(string gender = "All") 
         {
             using(employeesEntities entities = new employeesEntities())
             {
                 //this project was created to learn how to catch the data from an sql table 
                 ///example: http:/ /localhost:49891/api/employees
-                return entities.FoodLions.ToList();
+
+                switch (gender.ToLower())
+                {
+                    // example:http ://localhost:49891/api/employees?gender=male
+                    case "all":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.FoodLions.ToList());
+                    case "male":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.FoodLions.Where(x => x.Gender == "Male").ToList());
+                    case "female":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.FoodLions.Where(x => x.Gender == "Female").ToList());
+                    default:
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Value for gender must be All, male or female" + gender +"is invalid.");
+                }
+               
             }
         }
         public HttpResponseMessage Get(int id)
