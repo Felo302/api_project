@@ -29,8 +29,7 @@ namespace WebApplication1
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             // use camel case instead of cascal case for property names modify the result of JSon formatter
-            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
     }
 }
