@@ -93,6 +93,8 @@ namespace WebApplication1.Controllers
                 }
             }
         }
+        //id checks the request from URI value
+        //employee check the request from the body parameter
         public HttpResponseMessage put(int id, [FromBody]FoodLion employee)
         {
             using (employeesEntities entities = new employeesEntities())
